@@ -414,14 +414,23 @@ class Model:
         total_audio_duration = librosa.get_duration(path=audio1_path)
         print(f"--- Single audio duration: {total_audio_duration:.2f}s ---")
         
-        # Convert to frames: 25 fps, need embedding_length > frame_num
-        # Audio embedding is roughly 25 frames per second
-        max_possible_frames = int(total_audio_duration * 25) + 15  # Add 15 frame buffer
-        # Use minimum of pipeline max (1000) and what audio can support, with minimum of 5
-        calculated_frame_num = max(5, min(1000, max_possible_frames))
+        # Convert to frames: 25 fps, embedding_length must be > frame_num
+        # Audio embedding is exactly 25 frames per second
+        audio_embedding_frames = int(total_audio_duration * 25)
+        # Leave some buffer to ensure we don't exceed embedding length
+        max_possible_frames = max(5, audio_embedding_frames - 5)  # 5 frame safety buffer
+        # Use minimum of pipeline max (1000) and what audio can support
+        calculated_frame_num = min(1000, max_possible_frames)
         # Ensure it follows the 4n+1 pattern required by the model
         n = (calculated_frame_num - 1) // 4
         frame_num = 4 * n + 1
+        
+        # Final safety check: ensure frame_num doesn't exceed audio embedding length
+        if frame_num >= audio_embedding_frames:
+            # Recalculate with more conservative approach
+            safe_frames = audio_embedding_frames - 10  # 10 frame safety buffer
+            n = max(1, (safe_frames - 1) // 4)  # Ensure at least n=1 
+            frame_num = 4 * n + 1
         
         # Determine mode and frame settings based on total length needed
         if calculated_frame_num > 81:
@@ -435,6 +444,7 @@ class Model:
             chunk_frame_num = frame_num  # Generate exactly what we need in one go
             max_frame_num = frame_num  # Same as chunk for clip mode
         
+        print(f"--- Audio duration: {total_audio_duration:.2f}s, embedding frames: {audio_embedding_frames} ---")
         print(f"--- Total frames needed: {frame_num}, chunk size: {chunk_frame_num}, max: {max_frame_num}, mode: {mode} ---")
         
         # Create output directory and filename
@@ -470,7 +480,7 @@ class Model:
             sample_steps=8,
             sample_shift=2.0,
             sample_text_guide_scale=1.0,
-            sample_audio_guide_scale=7.0,
+            sample_audio_guide_scale=6.0,
             num_persistent_param_in_dit=500000000,
             audio_mode="localfile",
             use_teacache=True,
@@ -478,7 +488,7 @@ class Model:
             use_apg=False,
             apg_momentum=-0.75,
             apg_norm_threshold=55,
-            color_correction_strength=1.0,
+            color_correction_strength=0.5,
             scene_seg=False,
             quant=None,  # Using non-quantized model for LoRA support
         )
