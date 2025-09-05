@@ -60,7 +60,7 @@ modal run app.py --image-path "https://example.com/portrait.jpg" --audio1-path "
 
 The deployed service can be called via a `POST` request with proxy authentication. The API accepts a JSON payload with the following fields:
 
-- `image` (string, required): A URL to the source image **or video**. The input can be image or video. If video the output video will contain movement from the input video adjusted with the new lip sync to the audio.
+- `image` (string, required): A URL to the source image **or video**. The input can be image or video. If video the output video will contain some of the movement from the input video plus the new lip sync to the audio.
 - `audio1` (string, required): A URL to the source audio file (MP3 or WAV).
 - `prompt` (string, optional): A text prompt.
 

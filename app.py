@@ -480,7 +480,7 @@ class Model:
             sample_steps=8,
             sample_shift=2.0,
             sample_text_guide_scale=1.0,
-            sample_audio_guide_scale=6.0,
+            sample_audio_guide_scale=6.0, # under 6 we lose some lip sync but as we go higher image gets unstable.
             num_persistent_param_in_dit=500000000,
             audio_mode="localfile",
             use_teacache=True,
@@ -488,7 +488,7 @@ class Model:
             use_apg=False,
             apg_momentum=-0.75,
             apg_norm_threshold=55,
-            color_correction_strength=0.5,
+            color_correction_strength=0.2,
             scene_seg=False,
             quant=None,  # Using non-quantized model for LoRA support
         )
