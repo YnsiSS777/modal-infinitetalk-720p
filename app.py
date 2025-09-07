@@ -473,7 +473,7 @@ class Model:
             dit_fsdp=False,
             save_file=str(output_dir / output_filename),
             audio_save_dir=str(output_dir / "temp_audio"),
-            base_seed=int(time.time()),
+            base_seed=42,
             input_json=input_json_path,
             motion_frame=25,
             mode=mode,
