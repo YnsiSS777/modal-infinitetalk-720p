@@ -136,6 +136,7 @@ The URL format is `https://[username]--[app-name]-[class-name]-[method-name].mod
 
 ## Resources
 
+- [Video Tutorial: Step-by-Step Guide](https://youtu.be/gELJhS-DHIc)
 - [InfiniteTalk Paper](https://arxiv.org/pdf/2508.14033)
 - [InfiniteTalk Repo](https://github.com/MeiGen-AI/InfiniteTalk)
 
