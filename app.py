@@ -114,7 +114,7 @@ class API:
 
 # --- GPU Model Class ---
 @app.cls(
-    gpu="L40S",
+    gpu="H200",
     enable_memory_snapshot=True, # new gpu snapshot feature: https://modal.com/blog/gpu-mem-snapshots
     experimental_options={"enable_gpu_snapshot": True},
     image=image,
