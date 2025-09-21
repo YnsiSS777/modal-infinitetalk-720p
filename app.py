@@ -466,7 +466,7 @@ class Model:
             quant_dir=None,  # Using non-quantized model for LoRA support
             wav2vec_dir=str(model_root / "chinese-wav2vec2-base"),
             dit_path=None,
-            lora_dir=[str(model_root / "FusionX_LoRa" / "Wan2.1_I2V_14B_FusionX_LoRA.safetensors")],
+            lora_dir=[str(model_root / "FusionX_LoRa" / "FusionX_LoRa" / "Wan2.1_I2V_14B_FusionX_LoRA.safetensors")],
             lora_scale=[1.0],
             offload_model=False,
             ulysses_size=1,
