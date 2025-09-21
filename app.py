@@ -306,11 +306,14 @@ class Model:
                 #         description=description,
                 #     )
 
-                # Download FusioniX LoRA weights (will create FusionX_LoRa directory)
+                # Download FusioniX LoRA weights - FIXED PATH STRUCTURE
+                fusionx_lora_dir = model_root / "FusionX_LoRa"
+                fusionx_lora_dir.mkdir(parents=True, exist_ok=True)
+                
                 download_file(
                     repo_id="vrgamedevgirl84/Wan14BT2VFusioniX",
                     filename="FusionX_LoRa/Wan2.1_I2V_14B_FusionX_LoRA.safetensors",
-                    local_path=model_root / "FusionX_LoRa" / "Wan2.1_I2V_14B_FusionX_LoRA.safetensors",
+                    local_path=fusionx_lora_dir / "Wan2.1_I2V_14B_FusionX_LoRA.safetensors",
                     description="FusioniX LoRA weights",
                 )
                 
@@ -459,7 +462,7 @@ class Model:
             frame_num=chunk_frame_num,  # Chunk size for each iteration
             max_frame_num=max_frame_num,  # Total target length
             ckpt_dir=str(model_root / "Wan2.1-I2V-14B-720P"),  # CHANGED FROM 480P TO 720P
-            infinitetalk_dir=str(model_root / "InfiniteTalk" / "single" / "single" / "infinitetalk.safetensors"),
+            infinitetalk_dir=str(model_root / "InfiniteTalk" / "single" / "infinitetalk.safetensors"),  # FIXED: removed double "single"
             quant_dir=None,  # Using non-quantized model for LoRA support
             wav2vec_dir=str(model_root / "chinese-wav2vec2-base"),
             dit_path=None,
