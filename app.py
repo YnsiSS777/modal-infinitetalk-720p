@@ -201,11 +201,11 @@ class Model:
                 # Create necessary directories
                 # (model_root / "quant_models").mkdir(parents=True, exist_ok=True)
                 
-                # Download full Wan model for non-quantized operation with LoRA support
-                wan_model_dir = model_root / "Wan2.1-I2V-14B-480P"
+                # Download full Wan model for non-quantized operation with LoRA support - CHANGED TO 720P
+                wan_model_dir = model_root / "Wan2.1-I2V-14B-720P"
                 wan_model_dir.mkdir(exist_ok=True)
                 
-                # Essential Wan model files (config and encoders)
+                # Essential Wan model files (config and encoders) - CHANGED TO 720P
                 wan_base_files = [
                     ("config.json", "Wan model config"),
                     ("models_t5_umt5-xxl-enc-bf16.pth", "T5 text encoder weights"),
@@ -215,13 +215,13 @@ class Model:
                 
                 for filename, description in wan_base_files:
                     download_file(
-                        repo_id="Wan-AI/Wan2.1-I2V-14B-480P",
+                        repo_id="Wan-AI/Wan2.1-I2V-14B-720P",  # CHANGED TO 720P
                         filename=filename,
                         local_path=wan_model_dir / filename,
                         description=description
                     )
                 
-                # Download full diffusion model (7 shards) - required for non-quantized operation
+                # Download full diffusion model (7 shards) - required for non-quantized operation - CHANGED TO 720P
                 wan_diffusion_files = [
                     ("diffusion_pytorch_model-00001-of-00007.safetensors", "Wan diffusion model shard 1/7"),
                     ("diffusion_pytorch_model-00002-of-00007.safetensors", "Wan diffusion model shard 2/7"),
@@ -234,13 +234,13 @@ class Model:
                 
                 for filename, description in wan_diffusion_files:
                     download_file(
-                        repo_id="Wan-AI/Wan2.1-I2V-14B-480P",
+                        repo_id="Wan-AI/Wan2.1-I2V-14B-720P",  # CHANGED TO 720P
                         filename=filename,
                         local_path=wan_model_dir / filename,
                         description=description
                     )
                 
-                # Download tokenizer directories (need full structure)
+                # Download tokenizer directories (need full structure) - CHANGED TO 720P
                 tokenizer_dirs = [
                     ("google/umt5-xxl", "T5 tokenizer"),
                     ("xlm-roberta-large", "CLIP tokenizer")
@@ -252,7 +252,7 @@ class Model:
                         print(f"--- Downloading {description}... ---")
                         try:
                             snapshot_download(
-                                repo_id="Wan-AI/Wan2.1-I2V-14B-480P",
+                                repo_id="Wan-AI/Wan2.1-I2V-14B-720P",  # CHANGED TO 720P
                                 allow_patterns=[f"{subdir}/*"],
                                 local_dir=wan_model_dir
                             )
@@ -452,13 +452,13 @@ class Model:
         output_dir = Path(OUTPUT_DIR)
         model_root = Path(MODEL_DIR)
         
-        # Create args object that mimics command line arguments  
+        # Create args object that mimics command line arguments - CHANGED TO 720P
         args = SimpleNamespace(
             task="infinitetalk-14B",
-            size="infinitetalk-480",
+            size="infinitetalk-720",  # CHANGED FROM infinitetalk-480 TO infinitetalk-720
             frame_num=chunk_frame_num,  # Chunk size for each iteration
             max_frame_num=max_frame_num,  # Total target length
-            ckpt_dir=str(model_root / "Wan2.1-I2V-14B-480P"),
+            ckpt_dir=str(model_root / "Wan2.1-I2V-14B-720P"),  # CHANGED FROM 480P TO 720P
             infinitetalk_dir=str(model_root / "InfiniteTalk" / "single" / "single" / "infinitetalk.safetensors"),
             quant_dir=None,  # Using non-quantized model for LoRA support
             wav2vec_dir=str(model_root / "chinese-wav2vec2-base"),
@@ -478,7 +478,7 @@ class Model:
             motion_frame=25,
             mode=mode,
             sample_steps=8,
-            sample_shift=3.0,
+            sample_shift=11.0,  # CHANGED FROM 3.0 TO 11.0 (correct value for 720p)
             sample_text_guide_scale=1.0,
             sample_audio_guide_scale=6.0, # under 6 we lose some lip sync but as we go higher image gets unstable.
             num_persistent_param_in_dit=500000000,
@@ -604,4 +604,4 @@ def main(
     with open(output_path, "wb") as f:
         f.write(video_bytes)
     
-    print(f"🎉 --- Video saved to {output_path} ---") 
+    print(f"🎉 --- Video saved to {output_path} ---")
